@@ -8,6 +8,9 @@ if [ ${tenesAstyle} -ne 0 ]
 then
 	echo "No tenes astyle"
 	echo "Instalalo con "
+	
+	#Necesito feedback de si esto funciona en todas las distros. PR con
+	#distros y sus package manager mas que bienvenidos
 	distroName=$(grep -Po '^NAME=\K[[:alpha:]]{1,}' /etc/os-release)
 	case "${distroName}" in
 		"Ubuntu") echo "apt install astyle" ;; #Confirmar

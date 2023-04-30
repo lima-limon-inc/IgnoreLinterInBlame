@@ -58,9 +58,11 @@ git commit -m "Commit de formateo, nada de codigo cambiando"
 hashCommit=$(git rev-parse HEAD)
 
 firmaFormateo="Formateo del codigo"
-fecha+="#"
-fecha+=$(date)
-echo ${fecha} >> .git-blame-ignore-revs
+fechaYFirma+="# "
+fechaYFirma+=$(git config user.name)
+fechaYFirma+=" | "
+fechaYFirma+=$(date)
+echo ${fechaYFirma} >> .git-blame-ignore-revs
 echo ${hashCommit} >> .git-blame-ignore-revs
 echo "" >> .git-blame-ignore-revs
 

@@ -7,6 +7,15 @@ tenesAstyle=$(echo $?)
 if [ ${tenesAstyle} -ne 0 ]
 then
 	echo "No tenes astyle"
+	echo "Instalalo con "
+	distroName=$(grep -Po '^NAME=\K[[:alpha:]]{1,}' /etc/os-release)
+	case "${distroName}" in
+		"Ubuntu") echo "apt install astyle" ;; #Confirmar
+		"Fedora") echo "dnf install astyle" ;; #Confirmar
+		"Arch Linux") echo "pacman -S astyle" ;; #Confirmar
+		"Gentoo") echo "emerge --ask astyle" ;;
+		*) echo "paciencia" ;;
+	esac
 	echo "Instalalo antes de seguir"
 	exit 2
 fi

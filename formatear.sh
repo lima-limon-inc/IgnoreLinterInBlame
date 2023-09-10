@@ -2,27 +2,6 @@
 # Lima Limon Abril 2023
 # https://github.com/lima-limon-inc/FormateadorJava
 
-which astyle &> /dev/null
-tenesAstyle=$(echo $?)
-if [ ${tenesAstyle} -ne 0 ]
-then
-	echo "No tenes astyle"
-	echo "Instalalo con "
-	
-	#Necesito feedback de si esto funciona en todas las distros. PR con
-	#distros y sus package manager mas que bienvenidos
-	distroName=$(grep -Po '^NAME=\K[[:alpha:]]{1,}' /etc/os-release)
-	case "${distroName}" in
-		"Ubuntu") echo "apt install astyle" ;; #Confirmar
-		"Fedora") echo "dnf install astyle" ;; #Confirmar
-		"Arch Linux") echo "pacman -S astyle" ;; #Confirmar
-		"Gentoo") echo "emerge --ask astyle" ;;
-		*) echo "paciencia" ;;
-	esac
-	echo "Instalalo antes de seguir"
-	exit 2
-fi
-
 archivosSinComitear=$(git status -s | wc -l)
 if [ ${archivosSinComitear} -ne 0 ]
 then
@@ -32,28 +11,11 @@ then
 	exit 2
 fi
 
-echo "Formateo los archivos main"
-astyle src/main/java/* &> /dev/null
+# Ejecuto el comando pasado como argumento. Sea lo que sea
+eval $1
 
-archivosABorrar=$(find src/main/java/ -type f -name "*.orig" | wc -l)
+archivosABorrar=$(git status | grep modified | wc -l)
 echo "Formatee ${archivosABorrar} archivos"
-if [ ${archivosABorrar} -ne 0 ]
-then
-	echo "Borro los archivos viejos de main"
-	rm src/main/java/*.orig &> /dev/null
-fi
-
-
-echo "Formateo los archivos test"
-astyle src/test/java/* &> /dev/null
-
-archivosABorrar=$(find src/test/java/ -type f -name "*.orig" | wc -l)
-echo "Formatee ${archivosABorrar} archivos"
-if [ ${archivosABorrar} -ne 0 ]
-then
-	echo "Borro los archivos viejos de test"
-	rm src/test/java/*.orig &> /dev/null
-fi
 
 seCambioAlgo=$(git diff | wc -l)
 if [ ${seCambioAlgo} -eq 0 ]
@@ -82,14 +44,3 @@ echo "" >> .git-blame-ignore-revs
 echo "Hago el commit de lo anadido al archivo .git-blame-ignore-revs"
 git add .
 git commit -m "Anado hash a .git-blame-ignore-revs"
-
-
-
-
-
-
-
-
-
-
-
